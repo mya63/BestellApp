@@ -6,8 +6,22 @@
     <title>BestellApp</title>
     <link rel="icon" type="image/png" href="./Favicon/favicon-32x32.png" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        max-width: 1920px;
+        margin: 0 auto;
+      }
+      @media (min-width: 768px) {
+        #menu-section {
+          width: 70%;
+        }
+        #cart-section {
+          width: 30%;
+        }
+      }
+    </style>
   </head>
-  <body>
+  <body onload="init()">
     <header>
       <img src="./Logo/Logo.png" alt="Logo" />
     </header>
@@ -15,13 +29,8 @@
     <section id="info">
       <h1>BestellApp Pizzeria</h1>
       <div class="rating">★★★★☆ (4.5/5)</div>
-      <p>
-        Leckere Pizzen direkt aus dem Steinofen – täglich frisch zubereitet.
-      </p>
-      <p>
-        <strong>Lieferkosten:</strong> 5 € | <strong>Lieferzeit:</strong> ca.
-        30–45 Minuten
-      </p>
+      <p>Leckere Pizzen direkt aus dem Steinofen – täglich frisch zubereitet.</p>
+      <p><strong>Lieferkosten:</strong> 5 € | <strong>Lieferzeit:</strong> ca. 30–45 Minuten</p>
     </section>
 
     <section id="hero">
@@ -37,15 +46,12 @@
       <section id="cart-section">
         <h2>Warenkorb</h2>
         <div id="cart"></div>
-
-        <button id="order-button" class="order-button">Bestellen</button>
-        <div id="order-confirmation">
-          Deine Testbestellung wurde erfolgreich aufgenommen!
-        </div>
+        <button id="order-button" class="order-button" onclick="submitOrder()">Bestellen</button>
+        <div id="order-confirmation">Deine Testbestellung wurde erfolgreich aufgenommen!</div>
       </section>
     </main>
 
-    <div id="floating-cart-button">
+    <div id="floating-cart-button" onclick="openCartDialog()">
       🛒 <span id="cart-total-mini">0.00 €</span>
     </div>
 
@@ -53,15 +59,16 @@
       <p>&copy; 2025 BestellApp</p>
     </footer>
 
-    <script src="script.js"></script>
     <div id="cart-dialog" class="hidden">
       <div class="dialog-content">
         <h2>Warenkorb</h2>
-        <button id="dialog-order-button" class="order-button">Bestellen</button>
+        <button id="dialog-order-button" class="order-button" onclick="submitDialogOrder()">Bestellen</button>
         <div id="dialog-confirmation" class="confirmation-message"></div>
         <div id="cart-dialog-content"></div>
         <button class="close-cart-btn" onclick="closeCartDialog()">← Zurück</button>
       </div>
     </div>
+
+    <script src="script.js"></script>
   </body>
 </html>
