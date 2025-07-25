@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BestellApp</title>
+    <link rel="icon" type="image/png" href="./Favicon/favicon-32x32.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <img src="./Logo/Logo.png" alt="Logo" />
+    </header>
+
+    <section id="info">
+      <h1>BestellApp Pizzeria</h1>
+      <div class="rating">★★★★☆ (4.5/5)</div>
+      <p>
+        Leckere Pizzen direkt aus dem Steinofen – täglich frisch zubereitet.
+      </p>
+      <p>
+        <strong>Lieferkosten:</strong> 5 € | <strong>Lieferzeit:</strong> ca.
+        30–45 Minuten
+      </p>
+    </section>
+
+    <section id="hero">
+      <img src="./pizza1.jpg" alt="Titelbild" />
+    </section>
+
+    <main>
+      <section id="menu-section">
+        <h2>Gerichte</h2>
+        <div id="menu"></div>
+      </section>
+
+      <section id="cart-section">
+        <h2>Warenkorb</h2>
+        <div id="cart"></div>
+
+        <button id="order-button" class="order-button">Bestellen</button>
+        <div id="order-confirmation">
+          Deine Testbestellung wurde erfolgreich aufgenommen!
+        </div>
+      </section>
+    </main>
+
+    <div id="floating-cart-button">
+      🛒 <span id="cart-total-mini">0.00 €</span>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 BestellApp</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <div id="cart-dialog" class="hidden">
+      <div class="dialog-content">
+        <h2>Warenkorb</h2>
+        <button id="dialog-order-button" class="order-button">Bestellen</button>
+        <div id="dialog-confirmation" class="confirmation-message"></div>
+        <div id="cart-dialog-content"></div>
+        <button class="close-cart-btn" onclick="closeCartDialog()">← Zurück</button>
+      </div>
+    </div>
+  </body>
+</html>
