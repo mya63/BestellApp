@@ -101,7 +101,7 @@ main {
 .cart-item .cart-price {
   display: inline-block;
   text-align: right;
-  width: 60px; /* Feste Breite für Preisanzeige */
+  width: 60px;
 }
 
 .cart-quantity,

@@ -1,3 +1,4 @@
+
 let menuItems = [
   { name: "Pizza Krabben", price: 9.5, amount: 0 },
   { name: "Pizza Margherita", price: 5.9, amount: 0 },
@@ -35,16 +36,7 @@ function renderCart() {
     if (item.amount > 0) {
       let total = item.price * item.amount;
       subtotal += total;
-      cartHTML += `<div class="cart-item">
-        <div class="cart-name">${item.name}</div>
-        <div class="cart-controls">
-          <button onclick="decrease(${i})">-</button>
-          <span class="quantity">${item.amount}</span>
-          <button onclick="increase(${i})">+</button>
-        </div>
-        <div class="cart-price">${formatPrice(total)}</div>
-        <button class="delete-btn" onclick="remove(${i})">🗑️</button>
-      </div>`;
+      cartHTML += createCartItemHTML(item, i, total);
     }
   }
 
@@ -56,8 +48,20 @@ function renderCart() {
 
   document.getElementById("cart").innerHTML = cartHTML;
   document.getElementById("cart-total-mini").textContent = formatPrice(totalPrice);
-
   document.getElementById("cart-dialog-content").innerHTML = cartHTML;
+}
+
+function createCartItemHTML(item, i, total) {
+  return `<div class="cart-item">
+    <div class="cart-name">${item.name}</div>
+    <div class="cart-controls">
+      <button onclick="decrease(${i})">-</button>
+      <span class="quantity">${item.amount}</span>
+      <button onclick="increase(${i})">+</button>
+    </div>
+    <div class="cart-price">${formatPrice(total)}</div>
+    <button class="delete-btn" onclick="remove(${i})">🗑️</button>
+  </div>`;
 }
 
 function addItem(index) {
@@ -82,7 +86,9 @@ function remove(index) {
 }
 
 function submitOrder() {
-  menuItems.forEach((item) => (item.amount = 0));
+  for (let i = 0; i < menuItems.length; i++) {
+    menuItems[i].amount = 0;
+  }
   renderCart();
   document.getElementById("order-confirmation").style.display = "block";
   setTimeout(() => {
@@ -91,7 +97,9 @@ function submitOrder() {
 }
 
 function submitDialogOrder() {
-  menuItems.forEach((item) => (item.amount = 0));
+  for (let i = 0; i < menuItems.length; i++) {
+    menuItems[i].amount = 0;
+  }
   renderCart();
   document.getElementById("dialog-confirmation").textContent = "Deine Testbestellung wurde erfolgreich aufgenommen!";
   setTimeout(() => {
