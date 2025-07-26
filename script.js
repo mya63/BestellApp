@@ -1,4 +1,3 @@
-
 let menuItems = [
   { name: "Pizza Krabben", price: 9.5, amount: 0 },
   { name: "Pizza Margherita", price: 5.9, amount: 0 },
@@ -9,46 +8,25 @@ let menuItems = [
 
 function init() {
   renderMenuList();
-  renderCart();
+  updateCartUI();
 }
 
 function renderMenuList() {
-  let menuHTML = "";
+  let html = "";
   for (let i = 0; i < menuItems.length; i++) {
-    let item = menuItems[i];
-    menuHTML += `<div class="menu-item">
-      <div class="menu-name">${item.name}</div>
-      <div class="menu-price-action">
-        <span>${formatPrice(item.price)}</span>
-        <button onclick="addItem(${i})">+</button>
-      </div>
-    </div>`;
+    html += createMenuItemHTML(menuItems[i], i);
   }
-  document.getElementById("menu").innerHTML = menuHTML;
+  document.getElementById("menu").innerHTML = html;
 }
 
-function renderCart() {
-  let cartHTML = "";
-  let subtotal = 0;
-
-  for (let i = 0; i < menuItems.length; i++) {
-    let item = menuItems[i];
-    if (item.amount > 0) {
-      let total = item.price * item.amount;
-      subtotal += total;
-      cartHTML += createCartItemHTML(item, i, total);
-    }
-  }
-
-  const delivery = 5;
-  let totalPrice = subtotal + delivery;
-  cartHTML += `<div class="cart-total">
-    <strong>Gesamt:</strong> ${formatPrice(totalPrice)} (inkl. ${formatPrice(delivery)} Lieferkosten)
+function createMenuItemHTML(item, i) {
+  return `<div class="menu-item">
+    <div class="menu-name">${item.name}</div>
+    <div class="menu-price-action">
+      <span>${formatPrice(item.price)}</span>
+      <button onclick="addItem(${i})">+</button>
+    </div>
   </div>`;
-
-  document.getElementById("cart").innerHTML = cartHTML;
-  document.getElementById("cart-total-mini").textContent = formatPrice(totalPrice);
-  document.getElementById("cart-dialog-content").innerHTML = cartHTML;
 }
 
 function createCartItemHTML(item, i, total) {
@@ -64,48 +42,47 @@ function createCartItemHTML(item, i, total) {
   </div>`;
 }
 
-function addItem(index) {
-  menuItems[index].amount++;
-  renderCart();
+function getCartHTML() {
+  let html = "", subtotal = 0;
+  for (let i = 0; i < menuItems.length; i++) {
+    let item = menuItems[i];
+    if (item.amount > 0) {
+      let total = item.price * item.amount;
+      subtotal += total;
+      html += createCartItemHTML(item, i, total);
+    }
+  }
+  let delivery = 5, total = subtotal + delivery;
+  html += `<div class="cart-total"><strong>Gesamt:</strong> ${formatPrice(total)} (inkl. ${formatPrice(delivery)} Lieferkosten)</div>`;
+  return { html, total };
 }
 
-function increase(index) {
-  menuItems[index].amount++;
-  renderCart();
+function updateCartUI() {
+  const cartData = getCartHTML();
+  document.getElementById("cart").innerHTML = cartData.html;
+  document.getElementById("cart-total-mini").textContent = formatPrice(cartData.total);
+  document.getElementById("cart-dialog-content").innerHTML = cartData.html;
 }
 
-function decrease(index) {
-  if (menuItems[index].amount > 1) menuItems[index].amount--;
-  else menuItems[index].amount = 0;
-  renderCart();
-}
-
-function remove(index) {
-  menuItems[index].amount = 0;
-  renderCart();
-}
+function addItem(i) { menuItems[i].amount++; updateCartUI(); }
+function increase(i) { menuItems[i].amount++; updateCartUI(); }
+function decrease(i) { menuItems[i].amount = Math.max(0, menuItems[i].amount - 1); updateCartUI(); }
+function remove(i) { menuItems[i].amount = 0; updateCartUI(); }
 
 function submitOrder() {
-  for (let i = 0; i < menuItems.length; i++) {
-    menuItems[i].amount = 0;
-  }
-  renderCart();
-  document.getElementById("order-confirmation").style.display = "block";
-  setTimeout(() => {
-    document.getElementById("order-confirmation").style.display = "none";
-  }, 3000);
+  for (let i = 0; i < menuItems.length; i++) menuItems[i].amount = 0;
+  updateCartUI();
+  let el = document.getElementById("order-confirmation");
+  el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 3000);
 }
 
 function submitDialogOrder() {
-  for (let i = 0; i < menuItems.length; i++) {
-    menuItems[i].amount = 0;
-  }
-  renderCart();
-  document.getElementById("dialog-confirmation").textContent = "Deine Testbestellung wurde erfolgreich aufgenommen!";
-  setTimeout(() => {
-    document.getElementById("dialog-confirmation").textContent = "";
-    closeCartDialog();
-  }, 3000);
+  for (let i = 0; i < menuItems.length; i++) menuItems[i].amount = 0;
+  updateCartUI();
+  let msg = document.getElementById("dialog-confirmation");
+  msg.textContent = "Deine Testbestellung wurde erfolgreich aufgenommen!";
+  setTimeout(() => { msg.textContent = ""; closeCartDialog(); }, 3000);
 }
 
 function openCartDialog() {
